@@ -107,8 +107,7 @@ switch type
         f=java.io.File(folder);
         group=char(f.getName());
         if (strncmp(group,'TEXT',4))
-            %D.Data = readNPY(fullfile(folder,'text.npy'));
-            warning('TEXT files not supported by npy library');
+            D.Data = readNPY(fullfile(folder,'text.npy'));
         elseif (strncmp(group,'TTL',3))
             D.Data = readNPY(fullfile(folder,'channel_states.npy'));
             wordfile = fullfile(folder,'full_words.npy');
