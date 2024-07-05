@@ -1,4 +1,4 @@
-function D=load_open_ephys_binary(jsonFile, type, index, varargin)
+function [D,OE_Version] =load_open_ephys_binary(jsonFile, type, index, varargin)
 %function D=load_open_ephys_binary(oebinFile, type, index)
 %
 %Loads data recorded by Open Ephys in Binary format
@@ -54,6 +54,15 @@ end
 
 json=jsondecode(fileread(jsonFile));
 
+switch json.GUIVersion(1:3)
+    case '0.5'
+        OE_Version = 5;
+    case '0.6'
+        OE_Version = 6;
+    otherwise
+        error('Unknown OE Version')
+end
+
 %Load appropriate header data from json
 switch type
     case 'continuous'
@@ -102,14 +111,36 @@ switch type
         D.ElectrodeIndexes = readNPY(fullfile(folder,'spike_electrode_indices.npy'));
         D.SortedIndexes = readNPY(fullfile(folder,'spike_clusters.npy'));
     case 'events'
-        D.Timestamps = readNPY(fullfile(folder,'timestamps.npy'));
-        D.ChannelIndex = readNPY(fullfile(folder,'channels.npy'));
+
+        % NOTE THAT THIS PORTION OF V5/V6 WAS WRITEN BASED ON CROSSING DETECTOR
+        % OUTPUTS. OTHER EVENT PLUGINS MAY LOOK DIFFERENT
+
+        % Common fields v5 and v6.
+        % Note that in v5 timestamps is SAMPLES and in v6 is SECONDS!!
+        D.Timestamps = readNPY(fullfile(folder,'timestamps.npy')); 
+
+        switch OE_Version
+            case 5
+                D.ChannelIndex = readNPY(fullfile(folder,'channels.npy'));
+                D.SampleNumber = D.Timestamps;
+            case 6
+                D.ChannelIndex = nan(size(D.Timestamps)); % Field removed in V6 *Maybe*
+                D.SampleNumber = readNPY(fullfile(folder,'sample_numbers.npy'));                
+        end       
+        
         f=java.io.File(folder);
         group=char(f.getName());
         if (strncmp(group,'TEXT',4))
             D.Data = readNPY(fullfile(folder,'text.npy'));
         elseif (strncmp(group,'TTL',3))
-            D.Data = readNPY(fullfile(folder,'channel_states.npy'));
+            
+            switch OE_Version
+                case 5
+                    D.Data = readNPY(fullfile(folder,'channel_states.npy'));
+                case 6
+                    D.Data = readNPY(fullfile(folder,'states.npy'));
+            end
+            
             wordfile = fullfile(folder,'full_words.npy');
             if (isfile(wordfile))
                 D.FullWords = readNPY(wordfile);
