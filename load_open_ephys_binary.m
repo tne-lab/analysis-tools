@@ -154,9 +154,9 @@ if (isfile(metadatafile))
     try
     D.MetaData = readNPY(metadatafile);
     catch EX
-        fprintf('WARNING: cannot read metadata file.\nData structure might not be supported.\n\nError message: %s\nTrace:\n',EX.message);
+        warning(EX.identifier,'WARNING: cannot read metadata file.\nData structure might not be supported.\n\nError message: %s\nTrace:\n',EX.message);
         for i=1:length(EX.stack)
-            fprintf('File: %s Function: %s Line: %d\n',EX.stack(i).file,EX.stack(i).name,EX.stack(i).line);
+            % frintf('File: %s Function: %s Line: %d\n',EX.stack(i).file,EX.stack(i).name,EX.stack(i).line);
         end
     end
 end
