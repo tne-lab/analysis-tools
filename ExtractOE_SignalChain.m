@@ -1,13 +1,21 @@
-function [settings_data, indxOfInterest] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest,settingsFile)
+function [settings_data, indxOfInterest] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest)
 
 % Take a settings file or data root directory of interest and extract out
 % the signal chain of the recordings. Note that for a root directory, this
 % must contain the recording node folders which internally have a settings
-% file. 
+% file. Setting files are identified as containing 'settings.xml' in the
+% file name.
 %
 % Additionally, a nodeOfInterest string or cell array can be entered to
 % directly identify the specific indx within the signal chain that has the
-% plugin node of interest.
+% plugin node of interest. A sting sill search the plugin names and return
+% all those containing the requested string. A cell array will search
+% pluginNames for the first element and nodeNumber for the second. This is
+% useful if you know BOTH the plugin name and its node number (uncommon).
+% This functionality can also be done independently in the
+% IdentifyOE_SignalNode function.
+
+% GWDiehl July 2024
 
 if ~contains(dataRootDir,'settings.xml')
     subDirs = dir(dataRootDir);
@@ -18,20 +26,14 @@ if ~contains(dataRootDir,'settings.xml')
     settingsFile = [dataRootDir,'\',subDirs(recNodeIdx(1)).name,'\settings.xml'];
 
 else
+    settingsFile = dataRootDir;
     assert(isfile(settingsFile),'Your settings file does not seem to exist');
 end
 
 settings_data=import_OE_SignalChain(settingsFile);
 
-indxOfInterest = IdentifyOE_SignalNode()
-
-if iscell(nodeOfInterest)
-    nodeName = nodeOfInterest{1};
-    nodeNumber = nodeOfInterest{2};
-
-    indxOfInterest = cellfun(@(x,y) contains(x,nodeName) & strcmp(y,nodeNumber),settings_data.pluginName,settings_data.nodeName);
+if nargin > 1 & ~isempty(notOfInterest)
+    indxOfInterest = IdentifyOE_SignalNode(settings_data,nodeOfInterest);
 else
-    indxOfInterest = cellfun(@(x) contains(x,nodeOfInterest),settings_data.pluginName);
+    indxOfInterest = [];
 end
-
-indxOfInterest = find(indxOfInterest);
