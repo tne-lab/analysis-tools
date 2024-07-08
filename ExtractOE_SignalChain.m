@@ -23,6 +23,8 @@ end
 
 settings_data=import_OE_SignalChain(settingsFile);
 
+indxOfInterest = IdentifyOE_SignalNode()
+
 if iscell(nodeOfInterest)
     nodeName = nodeOfInterest{1};
     nodeNumber = nodeOfInterest{2};
