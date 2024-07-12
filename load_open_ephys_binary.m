@@ -153,7 +153,9 @@ end
 % Load metadata will now work via a python loader to a csv save to a matlab
 % structure.
 metadatafile = fullfile(folder,'metadata.npy');
-D.MetaData = readMetadataNPY(metadatafile);
+if (isfile(metadatafile))
+    D.MetaData = readMetadataNPY(metadatafile);
+end
 
 % % % 
 % % % if (isfile(metadatafile))
