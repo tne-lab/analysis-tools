@@ -149,15 +149,21 @@ switch type
            D.Data = readNPY(fullfile(folder,'data_array.npy'));
         end       
 end
+
+% Load metadata will now work via a python loader to a csv save to a matlab
+% structure.
 metadatafile = fullfile(folder,'metadata.npy');
-if (isfile(metadatafile))
-    try
-    D.MetaData = readNPY(metadatafile);
-    catch EX
-        warning(EX.identifier,'WARNING: cannot read metadata file.\nData structure might not be supported.\n\nError message: %s\nTrace:\n',EX.message);
-        for i=1:length(EX.stack)
-            % frintf('File: %s Function: %s Line: %d\n',EX.stack(i).file,EX.stack(i).name,EX.stack(i).line);
-        end
-    end
-end
+D.MetaData = readMetadataNPY(metadatafile);
+
+% % % 
+% % % if (isfile(metadatafile))
+% % %     try
+% % %     D.MetaData = readNPY(metadatafile);
+% % %     catch EX
+% % %         warning(EX.identifier,'WARNING: cannot read metadata file.\nData structure might not be supported.\n\nError message: %s\nTrace:\n',EX.message);
+% % %         for i=1:length(EX.stack)
+% % %             % frintf('File: %s Function: %s Line: %d\n',EX.stack(i).file,EX.stack(i).name,EX.stack(i).line);
+% % %         end
+% % %     end
+% % % end
 end
