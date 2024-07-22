@@ -17,6 +17,9 @@ end
 if nargin < 3 || isempty(srate)
     srate = 1000; % New sample rate
 end
+if nargin < 4
+    OE_Version = [];
+end
 
 if ismember('Time',toDo)
     % If we are coming from Version 5, convert to time. If we dont know the
