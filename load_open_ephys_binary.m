@@ -128,12 +128,12 @@ switch type
                 D.SampleNumber = readNPY(fullfile(folder,'sample_numbers.npy'));                
         end       
         
-        f=java.io.File(folder);
-        group=char(f.getName());
-        if (strncmp(group,'TEXT',4))
+        % Update this section to check for specific npy files. Things got
+        % renamed in v6 of OE so better to check for specific files.
+
+        if isfile(fullfile(folder,'text.npy')) % Check to see if this exists
             D.Data = readNPY(fullfile(folder,'text.npy'));
-        elseif (strncmp(group,'TTL',3))
-            
+        elseif isfile(fullfile(folder,'channel_states.npy')) || isfile(fullfile(folder,'states.npy'))            
             switch OE_Version
                 case 5
                     D.Data = readNPY(fullfile(folder,'channel_states.npy'));
@@ -145,7 +145,8 @@ switch type
             if (isfile(wordfile))
                 D.FullWords = readNPY(wordfile);
             end
-        elseif (strncmp(group,'BINARY',6))
+
+        elseif isfile(fullfile(folder,'data_array.npy'))
            D.Data = readNPY(fullfile(folder,'data_array.npy'));
         end       
 end
@@ -153,10 +154,11 @@ end
 % Load metadata will now work via a python loader to a csv save to a matlab
 % structure.
 metadatafile = fullfile(folder,'metadata.npy');
-if (isfile(metadatafile))
+if isfile(metadatafile)
     D.MetaData = readMetadataNPY(metadatafile);
 end
 
+% Replaced with above code
 % % % 
 % % % if (isfile(metadatafile))
 % % %     try
