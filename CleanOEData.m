@@ -25,7 +25,7 @@ if ismember('Time',toDo)
     % If we are coming from Version 5, convert to time. If we dont know the
     % version or want to be safe, check the step interval
 
-    ts_rate = median(diff(data_OE.Timestamps));
+    ts_rate = 1/median(diff(data_OE.Timestamps));
 
     if any(OE_Version == 5) || ts_rate == 1
         if iscell(data_OE)
