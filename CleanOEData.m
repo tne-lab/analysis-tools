@@ -25,13 +25,7 @@ if ismember('Time',toDo)
     % If we are coming from Version 5, convert to time. If we dont know the
     % version or want to be safe, check the step interval
 
-    ts_rate = nan;
-    if isempty(OE_Version) || isnan(OE_Version)
-        ts_rate = median(diff(data_OE.Timestamps));
-        if ts_rate ~= 1 && ts_rate > (1/data_OE.Header.sample_rate)*1.05 || ts_rate < (1/data_OE.Header.sample_rate)*.95
-            error('Your time stamps are not integers and they do not match the reported sampling rate. You have a problem')
-        end
-    end
+    ts_rate = median(diff(data_OE.Timestamps));
 
     if any(OE_Version == 5) || ts_rate == 1
         if iscell(data_OE)

@@ -58,13 +58,17 @@ end
 nEntries = length(selectIdx);
 fullD = cell(1,nEntries);
 
-fileNames = dataNames(selectIdx);
-
 if nEntries == 0
+    if collapseOuptuts
+        fullD = [];
+    end
     warning('You have found no files of interest')
     OE_Version =  nan;
+    fileNames = {};
     return
 end
+
+fileNames = dataNames(selectIdx);
 
 for iE = 1:nEntries
     if isempty(varargin)
