@@ -36,7 +36,7 @@ end
 
 settings_data=import_OE_SignalChain(settingsFile);
 
-if nargin > 1 & ~isempty(notOfInterest)
+if nargin > 1 & ~isempty(nodeOfInterest)
     indxOfInterest = IdentifyOE_SignalNode(settings_data,nodeOfInterest);
 else
     indxOfInterest = [];
