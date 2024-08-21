@@ -26,10 +26,13 @@ if checkSamples
     ts_rate = 1/median(diff(timestamps));
 
     if ts_rate == 1 || isa(data_OE.Timestamps,'integer')
-        % All good, we have integer samples
+        % All good to continue, we have integer samples that will convert
+        % to seconds
 
     elseif bypassSampleMatch && (ts_rate < data_OE.Header.sample_rate*1.05 && ts_rate > data_OE.Header.sample_rate*.95) % We are already in seconds, and they match the reported sample rate. Bail out of the function
-        % Note that this only works is we are dealing with continuous data
+        % Note that this only works is we are dealing with continuous data.
+        % Data are already in seconds matching the sample rate. Bail out
+        % of the function
         return
         
     else 
