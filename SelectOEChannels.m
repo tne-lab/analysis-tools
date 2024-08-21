@@ -83,7 +83,16 @@ end
 selectChan = unique(selectChan);
 
 data_OE.Header.channels = data_OE.Header.channels(selectChan);
-data_OE.Data = data_OE.Data(selectChan,:);
+
+if isa(data_OE.Data,'memmapfile')
+    tempData = data_OE.Data.Data;
+    dataName = fieldnames(tempData);
+    assert(length(dataName)==1,'Your map data does not have a single field')
+
+    data_OE.Data = double(tempData.(dataName{1})(selectChan,:));
+else
+    data_OE.Data = data_OE.Data(selectChan,:);
+end
 % Note that the Channel Number in the header is remaining unchanged from
 % the original total of data.
 
