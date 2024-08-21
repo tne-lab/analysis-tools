@@ -17,7 +17,7 @@ end
 ds_factor = data_OE.Header.sample_rate / srate;
 
 if ds_factor <= 1
-    fprinf('Your data is already below the requested sample rate. Returning as is. \n')
+    fprintf('Your data is already below the requested sample rate. Returning as is. \n')
     return
 end
 nChan = size(data_OE.Data,1);
