@@ -1,4 +1,4 @@
-function [settings, nodeName, pluginName, indxOfInterest] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest)
+function [signalChain, nodeName, pluginName, indxOfInterest] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest)
 
 % Take a settings file or data root directory of interest and extract out
 % the signal chain of the recordings. Note that for a root directory, this
@@ -34,10 +34,12 @@ else
     settingsFile = [dataRootDir,'\',subDirs(recNodeIdx(1)).name,'\',settingsFN];
 end
 
-[settings,nodeName,pluginName] = import_OE_Settings(settingsFile);
+[~,nodeName,pluginName] = import_OE_Settings(settingsFile);
+
+signalChain = [pluginName,nodeName];
 
 if nargin > 1 & ~isempty(nodeOfInterest)
-    indxOfInterest = IdentifyOE_SignalNode(pluginName,nodeName,nodeOfInterest);
+    [indxOfInterest,pluginName, nodeName] = IdentifyOE_SignalNode(pluginName,nodeName,nodeOfInterest);
 else
     indxOfInterest = [];
 end

@@ -25,6 +25,7 @@ assert(length(nodeIdx)==1,'You dont have a unique hit on the Node Info')
 assert(length(pluginIdx)==1,'You dont have a unique hit on the Plugin Name')
 
 % Extract the info
-nodeName = num2str(settings.(allColumns{nodeIdx}));
+temp = num2cell(settings.(allColumns{nodeIdx}));
+nodeName = cellfun(@(x) num2str(x),temp,'un',0);
 pluginName = settings.(allColumns{pluginIdx});
 
