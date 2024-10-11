@@ -14,7 +14,7 @@ if nargin < 3
     params = [];
 end
 
-ds_factor = data_OE.Header.sample_rate / srate;
+ds_factor = round(data_OE.Header.sample_rate / srate);
 
 if ds_factor <= 1
     fprintf('Your data is already below the requested sample rate. Returning as is. \n')
