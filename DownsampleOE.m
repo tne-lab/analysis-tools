@@ -33,7 +33,11 @@ for iC = 1:nChan
     if isempty(params)
         newArray(iC,:) = decimate(data_OE.Data(iC,:),ds_factor);
     else
-        newArray(iC,:) = decimate(data_OE.Data(iC,:),ds_factor,params{:});
+        if strcmp(params{1},'downsample')
+            newArray(iC,:) = downsample(data_OE.Data(iC,:),ds_factor);
+        else
+            newArray(iC,:) = decimate(data_OE.Data(iC,:),ds_factor,params{:});
+        end
     end
 end
 

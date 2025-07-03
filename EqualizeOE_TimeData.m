@@ -65,6 +65,7 @@ else
 end
 
 %% Verify that all of the timestamps now match
-
-assert(isequal(OE_Data.Timestamps,templateTime),'Your timestamps sequences do not match. You have a major problem')
+% Check the timestamps are idential to within sub nanoseconds (matlab/OE
+% machine precision
+assert(all(abs(OE_Data.Timestamps-templateTime)<1e-10),'Your timestamps sequences do not match. You have a major problem')
 
