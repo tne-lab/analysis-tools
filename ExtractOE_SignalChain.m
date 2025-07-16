@@ -1,4 +1,4 @@
-function [signalChain, nodeName, pluginName, indxOfInterest] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest)
+function [signalChain, nodeName, pluginName, indxOfInterest,settingsFile] = ExtractOE_SignalChain(dataRootDir,nodeOfInterest)
 
 % Take a settings file or data root directory of interest and extract out
 % the signal chain of the recordings. Note that for a root directory, this
